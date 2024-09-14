@@ -1,0 +1,16 @@
+# Evaluation of map-based LiDAR Localization Frameworks
+
+Everything is hosted in Docker Containers 🐳📦
+
+## Usage
+
+Build: `./docker/build_docker.sh --dockerfile <name>`
+
+Run: `./docker/run_docker.sh --dockerfile <name>`
+
+### Example
+
+```
+./docker/build_docker.sh --dockerfile ros1_bridge
+./docker/run_docker.sh --dockerfile ros1_bridge
+```
