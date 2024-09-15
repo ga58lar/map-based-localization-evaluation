@@ -46,7 +46,11 @@ RUN git clone -b humble https://github.com/rsasaki0109/ndt_omp_ros2.git src/ndt_
 #     cmake .. && \
 #     make -j
 
-RUN git clone https://github.com/rsasaki0109/lidar_localization_ros2.git src/lidar_localization_ros2
+RUN git clone -b main https://github.com/rsasaki0109/lidar_localization_ros2.git src/lidar_localization_ros2
+
+# Custom configs
+COPY config/lidar_localization_ros2/localization.yaml /dev_ws/src/lidar_localization_ros2/param/localization.yaml
+COPY config/lidar_localization_ros2/lidar_localization.launch.py /dev_ws/src/lidar_localization_ros2/launch/lidar_localization.launch.py
 
 RUN . /opt/ros/humble/setup.sh && \
     colcon build 
