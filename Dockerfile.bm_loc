@@ -1,0 +1,79 @@
+FROM ros:noetic
+
+ENV ROS_DISTRO=noetic
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y software-properties-common locales && \
+    add-apt-repository universe
+RUN locale-gen en_US en_US.UTF-8 && \
+    update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+
+# Create a non-root user
+ARG USERNAME=local
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+RUN groupadd --gid $USER_GID $USERNAME \
+  && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
+  # [Optional] Add sudo support for the non-root user
+  && apt-get update \
+  && apt-get install -y sudo \
+  && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME\
+  && chmod 0440 /etc/sudoers.d/$USERNAME \
+  # Cleanup
+  && rm -rf /var/lib/apt/lists/* \
+  && echo "source /usr/share/bash-completion/completions/git" >> /home/$USERNAME/.bashrc
+
+RUN apt-get update && apt-get install -y -q --no-install-recommends \
+  git \
+  vim \
+  build-essential \
+  cmake \
+  make \
+  gdb \
+  curl \
+  tmux \
+  vim \
+  libpcl-dev \
+  libeigen3-dev \
+  libboost-all-dev \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && apt-get install -y -q --no-install-recommends \
+  ros-${ROS_DISTRO}-pcl-ros \
+  ros-${ROS_DISTRO}-cv-bridge \
+  ros-${ROS_DISTRO}-tf \
+  ros-${ROS_DISTRO}-rviz \
+  ros-${ROS_DISTRO}-map-server \
+  ros-${ROS_DISTRO}-tf-conversions \
+  && rm -rf /var/lib/apt/lists/*
+
+# Install GTSAM 4.2 from source
+RUN apt-get update && apt-get install -y -q --no-install-recommends \
+    libboost-all-dev \
+    libtbb-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && git clone https://github.com/borglab/gtsam.git /tmp/gtsam \
+    && cd /tmp/gtsam \
+    && git checkout 4.2 \
+    && mkdir build && cd build \
+    && cmake .. \
+    && make -j$(nproc) \
+    && make install \
+    && rm -rf /tmp/gtsam
+
+WORKDIR /dev_ws
+
+RUN mkdir -p /dev_ws/src && cd /dev_ws/src && \
+    git clone https://github.com/koide3/ndt_omp && \
+    git clone https://github.com/SMRT-AIST/fast_gicp --recursive && \
+    git clone https://github.com/koide3/hdl_global_localization && \
+    git clone https://github.com/YixFeng/Block-Map-Based-Localization
+
+RUN /bin/bash -c '. /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make -DCMAKE_BUILD_TYPE=Release'
+RUN sed -i "6i source \"/dev_ws/devel/setup.bash\"" /ros_entrypoint.sh
+
+ENV QT_DEBUG_PLUGINS=1
+
+CMD [ "bash" ]
