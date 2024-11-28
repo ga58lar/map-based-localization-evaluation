@@ -97,7 +97,9 @@ tbd
 tbd
 
 ### [DLL](https://github.com/robotics-upo/dll/tree/Humble)
-tbd
+Needs a map in .bt (binary octomap format), which does not have negative entries.
+1. New Terminal: `ros2 launch dll kitti_launch.xml`
+2. New Terminal: `ros2 bag play /datasets/kitti/kitti_2011_10_03_drive_0027_synced/`
 
 ### [G3Reg](https://github.com/HKUST-Aerial-Robotics/G3Reg)
 tbd

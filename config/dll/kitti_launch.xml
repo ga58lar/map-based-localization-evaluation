@@ -1,0 +1,48 @@
+<!--
+-->
+<launch>
+  
+  # Use simulation time for TFs
+  <!-- <param name="use_sim_time" value="true" />  -->
+
+  # Fake odometry. You better use a good odometry estimator as LOAM
+  <node pkg="tf2_ros" exec="static_transform_publisher" name="odom_tf" args="0 0 0 0 0 0 odom velo_link" />
+  <node pkg="tf2_ros" exec="static_transform_publisher" name="odom_tf" args="0 0 0 0 0 0 velo_link base_link" />
+
+  # Flight 1 map conf
+  <arg name="base_frame_id" default="base_link"/>
+  <arg name="odom_frame_id" default="odom"/>
+  <arg name="global_frame_id" default="map"/>
+  <arg name="initial_x" default="120.0"/>
+  <arg name="initial_y" default="120.0"/>
+  <arg name="initial_z" default="20.0"/>
+  <arg name="initial_a" default="0.0"/> 
+  <arg name="map" default="map.bt" />
+  <arg name="map_path" default="/datasets/kitti/$(var map)"/>
+
+  # Launch DLL
+  <node name="dll_node" exec="dll_node" pkg="dll" output="screen">
+    <remap from="/dll_node/initial_pose" to="/initialpose"/>
+    <param name="in_cloud" value="/kitti/velo/pointcloud" />
+    <param name="base_frame_id" value="$(var base_frame_id)" />
+    <param name="odom_frame_id" value="$(var odom_frame_id)" />
+    <param name="global_frame_id" value="$(var global_frame_id)" />
+
+    <param name="update_rate" value="10.0" />
+    <param name="map_path" value="$(var map_path)" />   
+    <param name="update_min_d" value="0.01" />
+    <param name="update_min_a" value="0.01" /> 
+    <param name="update_min_time" value="0.1" />
+    <param name="initial_x"   value="$(var initial_x)"/>
+    <param name="initial_y"   value="$(var initial_y)"/>
+    <param name="initial_z"   value="$(var initial_z)"/>
+    <param name="initial_a"   value="$(var initial_a)"/>
+    <param name="use_imu" value="false" />  # Watch this!!! No IMU into the bag file, must be computed from ground truth
+    <param name="align_method" value="1" />  # 1: DLL, 2: NDT, 3: ICP
+   
+    
+  </node>
+
+  <node name="rviz" exec="rviz2" pkg="rviz2" args="-d $(find-pkg-share dll)/launch/catec.rviz" output="screen"/>
+
+</launch>	

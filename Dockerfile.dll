@@ -1,0 +1,65 @@
+FROM ros:humble
+
+ENV ROS_DISTRO=humble
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y software-properties-common locales && \
+    add-apt-repository universe
+RUN locale-gen en_US en_US.UTF-8 && \
+    update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+
+# Create a non-root user
+ARG USERNAME=local
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+RUN groupadd --gid $USER_GID $USERNAME \
+  && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
+  # [Optional] Add sudo support for the non-root user
+  && apt-get update \
+  && apt-get install -y sudo \
+  && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME\
+  && chmod 0440 /etc/sudoers.d/$USERNAME \
+  # Cleanup
+  && rm -rf /var/lib/apt/lists/* \
+  && echo "source /usr/share/bash-completion/completions/git" >> /home/$USERNAME/.bashrc
+
+RUN apt-get update && apt-get install -y -q --no-install-recommends \
+    git \    
+    vim \
+    build-essential \
+    cmake \
+    make \
+    gdb \
+    vim \
+    libpcl-dev \
+    libgoogle-glog-dev \
+    libgflags-dev \
+    libatlas-base-dev \
+    libeigen3-dev \
+    libsuitesparse-dev \
+    libomp-dev \
+    liboctomap-dev \
+    libceres-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && apt-get install -y -q --no-install-recommends \
+    ros-$ROS_DISTRO-pcl* \
+    ros-$ROS_DISTRO-rviz2 \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /dev_ws
+
+RUN mkdir -p /dev_ws/src && cd /dev_ws/src && \
+    git clone -b Humble https://github.com/robotics-upo/dll.git
+
+# HUMBLE bug fix
+RUN mkdir -p /dev_ws/src/dll/bags
+
+RUN . /opt/ros/humble/setup.sh && \
+    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
+
+ENV QT_DEBUG_PLUGINS=1
+
+CMD [ "bash" ]
