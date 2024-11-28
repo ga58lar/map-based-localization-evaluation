@@ -61,6 +61,7 @@ Convert a ROS1 bag to a ROS2 bag.
 3. (optional) You can also specify an initial guess, if you are not starting at the map origin.  
     New Terminal: `rosrun fast_lio_localization publish_initial_pose.py x x z yaw pitch roll`
 
+
 ### [liloc](https://github.com/Yixin-F/LiLoc)
 Switch mapping or map-based localization with mode "lio" or "relo" in the config.
 1. Resolve an issue: - src/imageProjection.cpp → remove lines 417-420 (if is_dense statement)
@@ -77,10 +78,17 @@ tbd
 tbd  
 
 ### [hdl_localization](https://github.com/koide3/hdl_localization)
-tbd  
+1. New Terminal: `roslaunch hdl_localization hdl_localization.launch`
+2. New Terminal: `rviz` (config: /dev_ws/src/hdl_localization/rviz/)
+3. New Terminal: `rosbag play /datasets/kitti/kitti_2011_10_03_drive_0027_synced.bag`
+
 
 ### [BM-Loc](https://github.com/YixFeng/Block-Map-Based-Localization)
-tbd
+Downlaod the example data from the GitHub and switch the data in Bms_for_test/M2DGR_Bms/M2DGR/street_01/ with your data.  
+If you only have a single map, rename your map to 000.pcd and remove everything besides the 000.pcd and the CentroidCloud.pcd.
+1. New Terminal: `roslaunch block_localization run_m2dgr.launch`
+2. New Terminal: `rosbag play /datasets/kitti/kitti_2011_10_03_drive_0027_synced.bag`
+
 
 ### [range-mcl](https://github.com/PRBonn/range-mcl)
 tbd
