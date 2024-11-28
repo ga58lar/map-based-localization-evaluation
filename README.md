@@ -44,6 +44,16 @@ Bridge topics between ROS1 and ROS2.
     c. `export ROS_MASTER_URI=http://localhost:11311`  
     d. `ros2 run ros1_bridge dynamic_bridge`
 
+
+### rosbags-convert
+*NO DOCKER*
+  
+Convert a ROS1 bag to a ROS2 bag.
+1. Create a virtual environment (tested with python=3.10)
+2. `pip3 install 'rosbags>=0.9.11'`
+3. `rosbags-convert --src /path/to/bag.bag --dst /path/to/output/folder/name`
+  
+
 ## Localization
 ### [fast_lio_localization](https://github.com/HViktorTsoi/FAST_LIO_LOCALIZATION)
 1. New Terminal: `roslaunch fast_lio_localization localization_velodyne.launch map:=/datasets/map.pcd`
@@ -72,6 +82,17 @@ tbd
 ### [BM-Loc](https://github.com/YixFeng/Block-Map-Based-Localization)
 tbd
 
+### [range-mcl](https://github.com/PRBonn/range-mcl)
+tbd
+
+### [LiDAR-Localization-100FPS](https://github.com/ShiPC-AI/LiDAR-Localization-100FPS)
+tbd
+
+### [DLL](https://github.com/robotics-upo/dll/tree/Humble)
+tbd
+
+### [G3Reg](https://github.com/HKUST-Aerial-Robotics/G3Reg)
+tbd
 
 ## Troubleshooting
 1. If you have problems with the attachment to a display, execute `xhost +` before starting the docker.
