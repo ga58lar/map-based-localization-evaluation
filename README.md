@@ -97,7 +97,7 @@ If you only have a single map, rename your map to 000.pcd and remove everything 
 
 
 ### [range-mcl](https://github.com/PRBonn/range-mcl)
-tbd
+*not yet tested*
 
 ### [LiDAR-Localization-100FPS](https://github.com/ShiPC-AI/LiDAR-Localization-100FPS)
 tbd
