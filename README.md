@@ -72,10 +72,16 @@ Switch mapping or map-based localization with mode "lio" or "relo" in the config
 
 
 ### [lidar_localization_ros2](https://github.com/rsasaki0109/lidar_localization_ros2)
-tbd
+1. New Terminal: `ros2 launch lidar_localization_ros2 lidar_localization.launch.py `
+2. New Terminal: `rviz2 -d src/lidar_localization_ros2/rviz/localization.rviz`
+3. New Terminal: `ros2 bag play /datasets/KITTI/kitti_2011_10_03_drive_0027_synced/ --topics /kitti/velo/pointcloud --remap /kitti/velo/pointcloud:=/velodyne_points`
 
-### [PALoc](https://github.com/JokerJohn/PALoc)
-tbd  
+
+### [DLL](https://github.com/robotics-upo/dll/tree/Humble)
+Needs a map in .bt (binary octomap format), which does not have negative entries.
+1. New Terminal: `ros2 launch dll kitti_launch.xml`
+2. New Terminal: `ros2 bag play /datasets/kitti/kitti_2011_10_03_drive_0027_synced/`
+
 
 ### [hdl_localization](https://github.com/koide3/hdl_localization)
 1. New Terminal: `roslaunch hdl_localization hdl_localization.launch`
@@ -96,13 +102,11 @@ tbd
 ### [LiDAR-Localization-100FPS](https://github.com/ShiPC-AI/LiDAR-Localization-100FPS)
 tbd
 
-### [DLL](https://github.com/robotics-upo/dll/tree/Humble)
-Needs a map in .bt (binary octomap format), which does not have negative entries.
-1. New Terminal: `ros2 launch dll kitti_launch.xml`
-2. New Terminal: `ros2 bag play /datasets/kitti/kitti_2011_10_03_drive_0027_synced/`
-
 ### [G3Reg](https://github.com/HKUST-Aerial-Robotics/G3Reg)
 tbd
+
+### [PALoc](https://github.com/JokerJohn/PALoc)
+tbd 
 
 ## Troubleshooting
 1. If you have problems with the attachment to a display, execute `xhost +` before starting the docker.

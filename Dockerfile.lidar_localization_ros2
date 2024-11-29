@@ -36,7 +36,8 @@ RUN apt-get update && apt-get install -y -q --no-install-recommends \
     libpcl-dev
 
 RUN apt-get update && apt-get install -y -q --no-install-recommends \
-    ros-$ROS_DISTRO-pcl*
+    ros-$ROS_DISTRO-pcl* \
+    ros-$ROS_DISTRO-rviz2
 
 WORKDIR /dev_ws
 
@@ -53,7 +54,7 @@ COPY config/lidar_localization_ros2/localization.yaml /dev_ws/src/lidar_localiza
 COPY config/lidar_localization_ros2/lidar_localization.launch.py /dev_ws/src/lidar_localization_ros2/launch/lidar_localization.launch.py
 
 RUN . /opt/ros/humble/setup.sh && \
-    colcon build 
+    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
 
 ENV QT_DEBUG_PLUGINS=1
 
