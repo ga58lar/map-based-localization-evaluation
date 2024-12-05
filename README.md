@@ -44,6 +44,16 @@ Bridge topics between ROS1 and ROS2.
     c. `export ROS_MASTER_URI=http://localhost:11311`  
     d. `ros2 run ros1_bridge dynamic_bridge`
 
+### bag2pcd
+Convert livox-msgs to pointcloud-msgs and export pointcloud-msgs to pcd files.
+
+Conversion:
+1. New Terminal: `roslaunch livox_repub livox_repub.launch`
+2. New Terminal: `rosbag play /path/to/bag`
+3. New Terminal: `rosbag record -a`
+
+Extraction:
+1. `rosrun pcl_ros bag_to_pcd <input_file.bag> <topic> <output_directory>`
 
 ### rosbags-convert
 *NO DOCKER*
